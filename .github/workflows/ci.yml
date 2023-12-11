@@ -1,0 +1,44 @@
+name: GitHub Actions React Demo
+
+on:
+  push:
+    branches: 
+      - main
+      - develop
+
+  pull_request:
+    branches: 
+      - main
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+      
+      - name: Format code
+        run: yarn lint:prettier
+
+      - name: Run Tests
+        run: yarn test
+      
+      - name: Build
+        run: yarn build
